@@ -1,0 +1,16 @@
+# Virtual Environment
+.venv/
+venv/
+
+# Python
+__pychache__/
+.pytest_cache/
+
+# environment variables
+.env
+
+# Logs
+*.log
+
+# Test
+.pytest_cache/
