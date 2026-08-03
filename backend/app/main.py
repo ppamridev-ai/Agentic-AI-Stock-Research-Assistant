@@ -1,18 +1,35 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI(
     title ="Agentic AI Stock Research Assistant",
     version="1.0.0"
 )
 
+# Standard FastAPI Convention to Serve CSS, JS, images
+app.mount(
+    "/static",
+    StaticFiles(directory="backend/app/static"),
+    name ="static"
+)
+
+#Standard FastAPI convention to serve HTML Templates
+templates = Jinja2Templates(
+    directory="backend/app/templates"
+)
 @app.get("/")
-def root():
-    return {
-        "message" : " Welcome to Agentic AI Stock Research Assistant"
-    }
+async def home(request:Request):
+    return templates.TemplateResponse(
+        "index.html",
+        {
+            "request": request
+        }
+    )
+        
 
 @app.get("/health")
-def health():
+async def health():
     return {
         "status":"healthy"
     }

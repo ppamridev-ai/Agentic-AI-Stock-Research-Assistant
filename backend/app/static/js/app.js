@@ -1,0 +1,1 @@
+console.log("Stock Research Assistant loaded");
