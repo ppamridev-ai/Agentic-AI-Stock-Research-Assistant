@@ -17,15 +17,20 @@
         Analyze stocks using AI agents,
         financial data, and market intelligence.
     </p>
+    <div class="search-box">
+        <input 
+            id="ticker"
+            type="text"
+            placeholder="Enter ticker (AAPL, NVDA)"
+        >
 
-    <input 
-        type="text"
-        placeholder="Enter ticker (AAPL, NVDA)"
-    >
-
-    <button>
-        Analyze
-    </button>
+        <button id="analyzeBtn">
+            Analyze
+        </button>
+    </div>
+    <hr>
+    <div id="results">
+    </div>
 </div>
 
 <script src="/static/js/app.js"></script>

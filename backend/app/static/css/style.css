@@ -1,31 +1,32 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f6f9;
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
 }
 
-
-.container {
-    width: 700px;
-    margin: 80px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 10px;
-}
-
-h1 {
-    color: #1b4f72;
-}
-
-
-input {
+.search-box input {
+    flex: 1;
     padding: 12px;
     width: 300px;
     font-size: 16px;
 }
 
+.search-box button {
+    padding: 12px 25px;
+}
 
-button {
-    padding: 12px 20px;
-    margin-left: 10px;
-    cursor: pointer;
+.result-card {
+    margin-top: 25px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fafafa;
+}
+
+.result-card h2 {
+    margin-top: 0;
+}
+
+.result-card p {
+    margin: 8px 0;
 }
