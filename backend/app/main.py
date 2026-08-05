@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from backend.app.routes import stock
 
 app = FastAPI(
     title ="Agentic AI Stock Research Assistant",
@@ -33,3 +34,5 @@ async def health():
     return {
         "status":"healthy"
     }
+
+app.include_router(stock.router)
