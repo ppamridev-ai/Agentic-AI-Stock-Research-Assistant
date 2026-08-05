@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from backend.app.services.stock_service import get_stock_data
+from backend.app.graph.workflow import graph
 
 router = APIRouter(
     prefix="/stocks",
@@ -10,8 +10,14 @@ router = APIRouter(
 @router.post("/analyze")
 def analyze_stock(ticker: str):
     try:
-        data = get_stock_data(ticker)
-        return data
+        result = graph.invoke(
+            {
+                "ticker": ticker,
+                "stock_data":{}
+            }
+        )
+        return result["stock_data"]
+    
     except Exception as e:
         raise HTTPException(
             status_code=500,
