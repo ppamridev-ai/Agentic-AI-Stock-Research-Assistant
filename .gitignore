@@ -1,16 +1,18 @@
-# Virtual Environment
+# Virtual environment
 .venv/
 venv/
 
 # Python
-__pychache__/
+__pycache__/
+*.py[cod]
 .pytest_cache/
 
-# environment variables
+# Environment variables
 .env
 
-# Logs
-*.log
+# OS / editor
+.DS_Store
 
-# Test
-.pytest_cache/
+# Logs and local docs
+*.log
+*.pages
