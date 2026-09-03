@@ -4,10 +4,13 @@ import numpy as np
 import os
 from dotenv import load_dotenv
 import requests
+from langsmith import traceable
+
 load_dotenv()
 
 ALPHAVANTAGE_API_KEY = os.getenv("ALPHAVANTAGE_API_KEY")
 
+@traceable(name="fetch_fundamental_data", run_type="tool")
 def fetch_fundamental_data(ticker: str) -> dict:
     """Fetch structured fundamental metrics from Yahoo Finance."""
     stock = yf.Ticker(ticker)
@@ -21,6 +24,7 @@ def fetch_fundamental_data(ticker: str) -> dict:
         "summary": f"Company operating in {info.get('sector', 'N/A')} sector with market cap of {info.get('marketCap', 'N/A')}."
     }
 
+@traceable(name="calculate_technical_indicators", run_type="tool")
 def calculate_technical_indicators(ticker: str) -> dict:
     """Calculate RSI and Moving Averages deterministically using pandas."""
     df = yf.download(ticker, period="1y", interval="1d", progress=False)
@@ -51,6 +55,7 @@ def calculate_technical_indicators(ticker: str) -> dict:
         "summary": f"Latest close: ${latest_close:.2f}. RSI: {rsi_14:.1f}. Trend is {trend} relative to 200 SMA."
     }
 
+@traceable(name="fetch_news_sentiment", run_type="tool")
 def fetch_news_sentiment(ticker: str) -> dict:
     """Fetch news sentiment from Alpha Vantage and map it to the app schema."""
     url = (

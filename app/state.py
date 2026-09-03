@@ -1,4 +1,5 @@
-from typing import TypedDict, List, Optional, Dict, Any
+import operator
+from typing import Annotated, TypedDict, List, Optional, Dict, Any
 from pydantic import BaseModel, Field
 
 class FundamentalMetrics(BaseModel):
@@ -27,4 +28,5 @@ class InvestmentState(TypedDict):
     news_data: Optional[Dict[str, Any]]
     risk_assessment: Optional[str]
     final_recommendation: Optional[str]
-    errors: List[str]
+    errors: Annotated[List[str], operator.add]
+    run_trace: Annotated[List[Dict[str, Any]], operator.add]

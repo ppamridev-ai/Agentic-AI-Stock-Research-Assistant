@@ -1,5 +1,6 @@
 import streamlit as st
-from app.graph import app_graph
+from app.harness import run_research
+from app.observability import project_name, tracing_enabled
 
 
 def _fmt_number(value, decimals: int = 2) -> str:
@@ -45,18 +46,7 @@ ticker = st.text_input("Enter Stock Ticker Symbol (e.g. AAPL, NVDA, MSFT):", "NV
 
 if st.button("Run Research Pipeline", type="primary"):
     with st.spinner(f"Orchestrating agents to evaluate {ticker}..."):
-        initial_state = {
-            "ticker": ticker,
-            "fundamental_data": None,
-            "technical_data": None,
-            "news_data": None,
-            "risk_assessment": None,
-            "final_recommendation": None,
-            "errors": []
-        }
-        
-        # Execute Graph
-        result = app_graph.invoke(initial_state)
+        result = run_research(ticker)
         
         # UI Display
         col1, col2 = st.columns(2)
@@ -125,3 +115,29 @@ if st.button("Run Research Pipeline", type="primary"):
             st.markdown(result["final_recommendation"])
         else:
             st.info("No final recommendation available.")
+
+        st.divider()
+        report = result.get("eval_report") or {}
+        with st.expander("Observability & evaluation", expanded=bool(result.get("errors"))):
+            st.caption(
+                f"LangSmith: {'on' if tracing_enabled() else 'off'} · "
+                f"project `{project_name()}` · "
+                f"Eval score: {report.get('score', 'n/a')} · "
+                f"Rating: {report.get('rating') or 'n/a'}"
+            )
+            if result.get("langsmith_url"):
+                st.link_button("Open LangSmith trace", result["langsmith_url"])
+            elif not tracing_enabled():
+                st.info(
+                    "Add `LANGSMITH_API_KEY` to `.env` (and set `LANGSMITH_TRACING=true`) "
+                    "to send this run to LangSmith."
+                )
+            if result.get("errors"):
+                for error in result["errors"]:
+                    st.error(error)
+            if report.get("failed"):
+                st.warning("Failed checks: " + ", ".join(report["failed"]))
+            elif report.get("passed"):
+                st.success("All evaluation checks passed.")
+            if result.get("run_trace"):
+                st.dataframe(result["run_trace"], hide_index=True)
